@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiangzhu.plat.repository.business.AccountRepository">
+
+    <resultMap id="accountMap" type="account">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="balance" column="balance"/>
+        <result property="coupon" column="coupon"/>
+        <result property="bonus" column="bonus"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="account" useGeneratedKeys="true" keyProperty="id">
+        insert into user (user_id,balance,coupon,bonus,create_time,update_time)
+        values
+        (#{userId},#{balance},#{coupon},#{bonus},#{createTime},#{updateTime})
+    </insert>
+
+    <select id="queryByUserId" resultMap="accountMap">
+        select * from account t where t.user_id = #{userId}
+    </select>
+
+    <select id="queryAllPagination" resultMap="accountMap">
+        select * from account t
+    </select>
+</mapper>

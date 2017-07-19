@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiangzhu.plat.repository.business.UserRepository">
+
+    <resultMap id="userMap" type="user">
+        <id property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="openId" column="open_id"/>
+        <result property="wechatName" column="wechat_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+    
+    <insert id="insert" parameterType="user" useGeneratedKeys="true" keyProperty="id">
+      insert into user (username,password,wechat_name,name,identity_no,mobile_no,create_time,update_time)
+      values
+      (#{username},#{password},#{wechatName},#{name},#{identityNo},#{mobileNo},#{createTime},#{updateTime})
+    </insert>
+    
+    <select id="queryAllPagination" resultMap="userMap">
+        select * from user t
+    </select>
+
+    <select id="queryByUsername" resultMap="userMap">
+        select * from user t where t.username = #{username}
+    </select>
+
+    <select id="queryByOpenId" resultMap="userMap">
+        select * from user t where t.open_id = #{openId}
+    </select>
+</mapper>

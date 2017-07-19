@@ -1,0 +1,9 @@
+#set($layout="layout/baseLayout.vm")
+<div>
+    <p>需要登录</p>
+    <form method="post" action="login">
+        <input type="text" name="username" placeholder="用户名">
+        <input type="password" name="password">
+        <input type="submit">
+    </form>
+</div>

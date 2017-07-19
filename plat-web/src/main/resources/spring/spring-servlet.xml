@@ -1,0 +1,41 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd"
+       xmlns:mvc="http://www.springframework.org/schema/mvc">
+
+    <mvc:annotation-driven/>
+
+    <context:component-scan base-package="com.xiangzhu.plat.controller"/>
+
+    <!-- 配置velocity引擎 -->
+    <bean id="velocityConfigurer" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+        <!-- 模板存放的路径 -->
+        <property name="resourceLoaderPath" value="/WEB-INF/pages/"/>
+        <!--<property name="configLocation" value="WEB-INF/config/velocity.properties"/>-->
+        <property name="configLocation" value="classpath:config/velocity.properties"/>
+    </bean>
+
+    <!-- 配置视图的显示 -->
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.velocity.VelocityLayoutViewResolver">
+        <property name="prefix" value=""/>
+        <property name="suffix" value=".vm"/>
+        <property name="toolboxConfigLocation" value="WEB-INF/velocity-tools.xml"/>
+        <property name="dateToolAttribute" value="date"/>
+        <property name="numberToolAttribute" value="number"/>
+        <property name="contentType" value="text/html;charset=UTF-8"/>
+        <property name="exposeSpringMacroHelpers" value="true"/>
+        <property name="exposeRequestAttributes" value="true"/>
+        <property name="layoutUrl" value="layout/baseLayout.vm"/>
+    </bean>
+
+
+    <mvc:resources location="WEB-INF/image/" mapping="static/image/**"/>
+    <mvc:resources location="WEB-INF/js/" mapping="static/js/**"/>
+    <mvc:resources location="WEB-INF/css/" mapping="static/styles/**"/>
+</beans>
