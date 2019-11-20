@@ -6,7 +6,9 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * Created by liluoqi on 2017/7/9.
+ *
+ * @author liluoqi
+ * @date 2017/7/9
  * 数据库操作基础通用接口
  */
 public interface BaseRepository<T extends BaseModel> {

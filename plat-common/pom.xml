@@ -92,6 +92,7 @@
             <scope>test</scope>
         </dependency>
 
+        <!--dbcp连接池-->
         <dependency>
             <groupId>commons-dbcp</groupId>
             <artifactId>commons-dbcp</artifactId>

@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 /**
  * Created by liluoqi on 2017/7/16.
  * 定时任务rest接口
+ * @author lqli
  */
 @Component
 @Path("schedule")

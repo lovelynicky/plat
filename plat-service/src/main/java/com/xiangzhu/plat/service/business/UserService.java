@@ -9,7 +9,6 @@ import com.xiangzhu.plat.repository.base.PaginationRepository;
 import com.xiangzhu.plat.repository.business.UserRepository;
 import com.xiangzhu.plat.utils.MD5Utils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +30,6 @@ public class UserService {
         return userRepository.insert(user);
     }
 
-    @Cacheable("userPagination")
     public Page<User> queryAllPagination(Pagination pagination) {
         return paginationRepository.queryPagination("userRepository","queryAllPagination", pagination);
     }
@@ -45,7 +43,6 @@ public class UserService {
                 UserLoginCheck.notValid(String.format("用户:%s密码:%s不对", username, password));
     }
 
-    @Cacheable("userByOpenId")
     public User queryByOpenId(String openId) {
         return ((UserRepository)userRepository).queryByOpenId(openId);
     }

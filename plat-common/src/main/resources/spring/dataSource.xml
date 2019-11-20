@@ -20,17 +20,9 @@
 		<property name="removeAbandoned" value="true"/>
 		<property name="removeAbandonedTimeout" value="180"/>
 		<property name="connectionProperties" value="clientEncoding=utf-8"/>
-		<property name="validationQuery">
-			<value>SELECT count(*) from dual</value>
-		</property>
-		<property name="testOnBorrow">
-			<value>true</value>
-		</property>
-		<property name="testOnReturn">
-			<value>true</value>
-		</property>
-		<property name="testWhileIdle">
-			<value>true</value>
-		</property>
+		<property name="validationQuery" value="SELECT count(*) from dual"/>
+		<property name="testOnBorrow" value="true"/>
+		<property name="testOnReturn" value="true"/>
+		<property name="testWhileIdle" value="true"/>
 	</bean>
 </beans>

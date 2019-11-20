@@ -1,8 +1,11 @@
 package com.xiangzhu.plat.domain.schedule;
 
+import com.xiangzhu.plat.utils.DateUtils;
 import org.quartz.JobExecutionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Date;
 
 /**
  * Created by liluoqi on 2017/7/16.
@@ -16,6 +19,6 @@ public class TestJob extends BaseJob {
 
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) {
-        logger.info("test job executing!");
+        logger.info(String.format("test job execute at :%s",DateUtils.formatDateToSeconds(new Date())));
     }
 }

@@ -1,6 +1,5 @@
 package com.xiangzhu.plat.domain;
 
-import org.apache.commons.lang3.StringUtils;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
