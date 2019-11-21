@@ -50,4 +50,16 @@ public class ScheduleResource {
             return JsonUtils.toJson(false);
         }
     }
+
+    @Path("adjustJobCron")
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    public String adjustJobCron(@FormParam("jobClass") String jobClass, @FormParam("newCronExpr") String newCronExpr){
+        logger.info(String.format("调整job class:%s的定时任务时间为:%s",jobClass,newCronExpr));
+        try {
+            return JsonUtils.toJson(scheduleService.adjustCronExpr(jobClass, newCronExpr));
+        }catch (Exception e){
+            return JsonUtils.toJson(false);
+        }
+    }
 }

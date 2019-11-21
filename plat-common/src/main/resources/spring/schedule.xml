@@ -5,13 +5,33 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
+    <!-- 配置定时任务quartz的数据库数据源 -->
+    <bean name="scheduleDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${mysql.schedule.driverClassName}"/>
+        <property name="url" value="${mysql.schedule.url}"/>
+        <property name="username" value="${mysql.schedule.username}"/>
+        <property name="password" value="${mysql.schedule.password}"/>
+        <property name="maxActive" value="20"/>
+        <property name="initialSize" value="1"/>
+        <property name="maxWait" value="60000"/>
+        <property name="maxIdle" value="20"/>
+        <property name="minIdle" value="3"/>
+        <property name="removeAbandoned" value="true"/>
+        <property name="removeAbandonedTimeout" value="180"/>
+        <property name="connectionProperties" value="clientEncoding=utf-8"/>
+        <property name="validationQuery" value="SELECT count(*) from dual"/>
+        <property name="testOnBorrow" value="true"/>
+        <property name="testOnReturn" value="true"/>
+        <property name="testWhileIdle" value="true"/>
+    </bean>
+
     <bean id="schedulerFactoryBean"
           class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
         <description>定时任务调度器工厂</description>
         <property name="schedulerName" value="plat-Scheduler"/>
         <property name="applicationContextSchedulerContextKey" value="applicationContext"/>
         <property name="configLocation" value="classpath:config/quartz.properties"/>
-        <property name="dataSource" ref="dataSource"/>
+        <property name="dataSource" ref="scheduleDataSource"/>
         <property name="globalJobListeners">
             <list>
                 <bean class="com.xiangzhu.plat.domain.JobListener"/>

@@ -2,6 +2,7 @@ package com.xiangzhu.plat.service.base;
 
 import com.xiangzhu.plat.utils.ClassUtils;
 import com.xiangzhu.plat.utils.JsonUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.quartz.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +15,7 @@ import java.util.Map;
 /**
  * Created by liluoqi on 2017/7/16.
  * 任务调度操作类
+ *
  * @author lqli
  */
 @Service
@@ -40,6 +42,7 @@ public class ScheduleService {
 
     /**
      * 开始job
+     *
      * @throws SchedulerException SchedulerException
      */
     public void scheduleStart() throws SchedulerException {
@@ -64,7 +67,6 @@ public class ScheduleService {
                 for (String key : jobDataMap.keySet()) {
                     jobDetail.getJobDataMap().put(key, jobDataMap.get(key));
                 }
-
             }
             CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression);
             Trigger trigger = TriggerBuilder.newTrigger().withIdentity(String.format("%s%s", TRIGGER_PREFIX, jobDetail.getKey().getName()), jobDetail.getKey().getGroup())
@@ -92,6 +94,45 @@ public class ScheduleService {
     public boolean addCronJob(String jobClass, String cronExpression, String jobDataMapString, String description) {
         Map<String, Object> jobDataMap = JsonUtils.fromJsonMap(jobDataMapString);
         return addCronJob(jobClass, cronExpression, jobDataMap, description);
+    }
+
+    /**
+     * 调整任务执行时间
+     *
+     * @param jobClass    jobClass
+     * @param newCronExpr 新的时间表达式
+     * @return 结果
+     */
+    public boolean adjustCronExpr(String jobClass, String newCronExpr) {
+        if (StringUtils.isBlank(jobClass)) {
+            logger.error("需要调整的任务类不能为空");
+            return false;
+        }
+        if (StringUtils.isBlank(newCronExpr)) {
+            logger.error("新的定时表达式不能为空");
+            return false;
+        }
+        try {
+            JobDetail jobDetail = scheduler.getJobDetail(new JobKey(parseJobName(jobClass), DEFAULT_GROUP));
+            if (jobDetail != null) {
+                TriggerKey triggerKey = new TriggerKey(String.format("%s%s", TRIGGER_PREFIX, jobDetail.getKey().getName()), DEFAULT_GROUP);
+                Trigger trigger = scheduler.getTrigger(triggerKey);
+                if (trigger != null) {
+                    CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule(newCronExpr);
+                    Trigger newTrigger = TriggerBuilder.newTrigger().withIdentity(String.format("%s%s", TRIGGER_PREFIX, jobDetail.getKey().getName()), jobDetail.getKey().getGroup())
+                            .withSchedule(cronScheduleBuilder).startNow().build();
+                    scheduler.rescheduleJob(triggerKey, newTrigger);
+                    return true;
+                } else {
+                    logger.error(String.format("获取不到jobClass:%s对应job trigger", jobClass));
+                }
+            } else {
+                logger.error(String.format("获取不到jobClass:%s对应jobDetail", jobClass));
+            }
+        } catch (SchedulerException e) {
+            logger.error(String.format("获取jobClass:%s对应jobDetail异常", jobClass), e);
+        }
+        return false;
     }
 
     private String parseJobName(String jobClass) {
