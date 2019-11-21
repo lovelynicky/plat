@@ -1,6 +1,7 @@
 package com.xiangzhu.plat.domain.schedule;
 
 import com.xiangzhu.plat.utils.DateUtils;
+import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,7 +9,8 @@ import org.slf4j.LoggerFactory;
 import java.util.Date;
 
 /**
- * Created by liluoqi on 2017/7/16.
+ * @author liluoqi
+ * @date 2017/7/16
  * 测试job
  */
 public class TestJob extends BaseJob {
@@ -19,6 +21,8 @@ public class TestJob extends BaseJob {
 
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) {
-        logger.info(String.format("test job execute at :%s",DateUtils.formatDateToSeconds(new Date())));
+        JobDataMap jobDataMap = jobExecutionContext.getJobDetail().getJobDataMap();
+        long amount = jobDataMap.getLong("amount");
+        logger.info(String.format("test job execute at :%s,amount param is :%s", DateUtils.formatDateToSeconds(new Date()), amount));
     }
 }

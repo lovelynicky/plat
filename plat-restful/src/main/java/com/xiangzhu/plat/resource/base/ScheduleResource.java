@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 /**
  * Created by liluoqi on 2017/7/16.
  * 定时任务rest接口
+ *
  * @author lqli
  */
 @Component
@@ -47,6 +48,7 @@ public class ScheduleResource {
         try {
             return JsonUtils.toJson(scheduleService.addCronJob(jobClass, cronExpression, jobDataMapString, description));
         } catch (Exception e) {
+            logger.error(String.format("新增job class:%s,cron express:%s,描述:%s的job异常", jobClass, cronExpression, description), e);
             return JsonUtils.toJson(false);
         }
     }
@@ -54,11 +56,11 @@ public class ScheduleResource {
     @Path("adjustJobCron")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public String adjustJobCron(@FormParam("jobClass") String jobClass, @FormParam("newCronExpr") String newCronExpr){
-        logger.info(String.format("调整job class:%s的定时任务时间为:%s",jobClass,newCronExpr));
+    public String adjustJobCron(@FormParam("jobClass") String jobClass, @FormParam("newCronExpr") String newCronExpr) {
+        logger.info(String.format("调整job class:%s的定时任务时间为:%s", jobClass, newCronExpr));
         try {
             return JsonUtils.toJson(scheduleService.adjustCronExpr(jobClass, newCronExpr));
-        }catch (Exception e){
+        } catch (Exception e) {
             return JsonUtils.toJson(false);
         }
     }
