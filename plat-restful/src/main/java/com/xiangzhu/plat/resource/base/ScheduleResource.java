@@ -64,4 +64,12 @@ public class ScheduleResource {
             return JsonUtils.toJson(false);
         }
     }
+
+    @Path("addJobData")
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    public String addJobData(@FormParam("jobClass") String jobClass, @FormParam("key") String key, @FormParam("value") String value) {
+        logger.info(String.format("添加参数键值对key:%s,value:%s到jobClass:%s", key, value, jobClass));
+        return JsonUtils.toJson(scheduleService.addJobData(jobClass, key, value));
+    }
 }

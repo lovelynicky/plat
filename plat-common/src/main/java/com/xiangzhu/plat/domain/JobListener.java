@@ -9,7 +9,9 @@ import org.slf4j.LoggerFactory;
 import java.sql.Timestamp;
 
 /**
- * Created by liluoqi on 2017/7/16.
+ *
+ * @author liluoqi
+ * @date 2017/7/16
  */
 public class JobListener implements org.quartz.JobListener {
     private static Logger logger = LoggerFactory.getLogger(JobListener.class);

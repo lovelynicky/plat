@@ -135,6 +135,36 @@ public class ScheduleService {
         return false;
     }
 
+    /**
+     * 添加任务数据
+     *
+     * @param jobClass 任务完整类名
+     * @param key      key
+     * @param value    value
+     * @return boolean
+     * // TODO: 2019/11/21  还未生效
+     */
+    public boolean addJobData(String jobClass, String key, String value) {
+        try {
+            JobDetail jobDetail = scheduler.getJobDetail(new JobKey(parseJobName(jobClass), DEFAULT_GROUP));
+            if (jobDetail != null) {
+                jobDetail.getJobDataMap().put(key,value);
+                TriggerKey triggerKey = new TriggerKey(String.format("%s%s", TRIGGER_PREFIX, jobDetail.getKey().getName()), DEFAULT_GROUP);
+                Trigger trigger = scheduler.getTrigger(triggerKey);
+                CronScheduleBuilder cronScheduleBuilder = (CronScheduleBuilder) trigger.getScheduleBuilder();
+                Trigger newTrigger = TriggerBuilder.newTrigger().withIdentity(String.format("%s%s", TRIGGER_PREFIX, jobDetail.getKey().getName()), jobDetail.getKey().getGroup())
+                        .withSchedule(cronScheduleBuilder).usingJobData(key,value).startNow().build();
+                scheduler.rescheduleJob(triggerKey,newTrigger);
+                return true;
+            } else {
+                logger.error(String.format("找不到jobClass:%s对应jobDetail", jobClass));
+            }
+        } catch (SchedulerException e) {
+            logger.error(String.format("添加参数键值对key:%s,value:%s到jobClass:%s对应jobDetail失败", key,value,jobClass),e);
+        }
+        return false;
+    }
+
     private String parseJobName(String jobClass) {
         return jobClass.substring(jobClass.lastIndexOf(".") + 1);
     }

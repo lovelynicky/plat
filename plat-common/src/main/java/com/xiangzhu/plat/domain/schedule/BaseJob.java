@@ -1,14 +1,13 @@
 package com.xiangzhu.plat.domain.schedule;
 
-import org.quartz.Job;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
-import org.quartz.SchedulerException;
+import org.quartz.*;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
- * Created by liluoqi on 2017/7/16.
+ *
+ * @author liluoqi
+ * @date 2017/7/16
  * 定时job
  */
 public abstract class BaseJob implements Job{
